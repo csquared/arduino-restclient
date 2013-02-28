@@ -19,9 +19,12 @@ int HTTP::get(const char* path, char** headers, String* response){
     // Make a HTTP request:
     String request_line = String("GET ") + String(path) + String(" HTTP/1.0");
     http_client.println(request_line);
+    //Serial.println(request_line);
     int length = sizeof(headers) / sizeof(char*);
-    for(int i=0; i<length; i++){
+    //Serial.println(length);
+    for(int i=0; i<=length; i++){
       http_client.println(headers[i]);
+   //   Serial.println(headers[i]);
     }
     http_client.println();
 
