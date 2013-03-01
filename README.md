@@ -2,21 +2,39 @@
 
 HTTP Request library for Arduino and the Ethernet shield.
 
-## Usage
+# Install
+
+Clone (or download and unzip) the repository to `~/Documents/Arduino/libraries`
+where `~/Documents/Arduino` is your sketchbook directory.
+
+    > cd ~/Documents/Arduino
+    > mkdir libraries
+    > cd libraries
+    > git clone https://github.com/csquared/arduino-http.git HTTP
+
+# Usage
 
 Let's connect to a Heroku app.
 
-### Set a base url
+## Require It
+
+```c++
+#include <Ethernet.h>
+#include <SPI.h>
+#include "HTTP.h"
+```
+
+## Set a base url
 
     HTTP heroku = HTTP("http://proxy.herokuapp.com");
 
-### Start the Ethernet client with DHCP
+## Start the Ethernet client with DHCP
 
     if (heroku.begin(mac) == 0) {
       Serial.println("Failed to configure Ethernet using DHCP");
     }
 
-### GET requests
+## GET requests
 
     char* headers[] = {"Host: myapp.herokuapp.com"};
     String response;
@@ -24,7 +42,7 @@ Let's connect to a Heroku app.
     Serial.println(response)
 
 
-### POST requests
+## POST requests
 
     char* headers[] = {"Host: myapp.herokuapp.com"};
     String body = "hello, world";
@@ -32,6 +50,6 @@ Let's connect to a Heroku app.
     int error = heroku.get("/status", headers, 1, body, &response);
     Serial.println(response)
 
-## Thanks
+# Thanks
 
 @ricardochimal For all his c++ help.  Couldn't have done this without you!
