@@ -53,4 +53,4 @@ Let's connect to a Heroku app.
 
 # Thanks
 
-@ricardochimal For all his c++ help.  Couldn't have done this without you!
+[ricardochimal](https://github.com/ricardochimal) For all his c++ help.  Couldn't have done this without you!
