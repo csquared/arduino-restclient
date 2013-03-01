@@ -30,6 +30,7 @@ Let's connect to a Heroku app.
 
 ## Start the Ethernet client with DHCP
 
+    byte mac[] = { 0xDE, 0xDE, 0xDE, 0xAD, 0xFE, 0xED };
     if (heroku.begin(mac) == 0) {
       Serial.println("Failed to configure Ethernet using DHCP");
     }
