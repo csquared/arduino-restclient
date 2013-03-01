@@ -8,11 +8,11 @@ class HTTP {
     HTTP(const char* base_url);
 
     int begin(byte*);
-    int get(const char*, char**, String* );
+    int get(const char*, char**, int, String* );
+    int post(const char* path, char** headers, int, String, String* response);
     /*
-    char get(char resource);
-    char post(char resource);
     char put(char resource);
+    char delete(char resource);
     */
   private:
     EthernetClient http_client;

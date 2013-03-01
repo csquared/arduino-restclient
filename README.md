@@ -16,11 +16,22 @@ Let's connect to a Heroku app.
       Serial.println("Failed to configure Ethernet using DHCP");
     }
 
-### Make a GET request
+### GET requests
 
-    //0 for success, 1 for error
-
-    char* headers[] = {"Host: myapp.herokuapp.com"}
+    char* headers[] = {"Host: myapp.herokuapp.com"};
     String response;
-    int error = heroku.get("/status", headers, &response);
+    int error = heroku.get("/status", headers, 1, &response);
     Serial.println(response)
+
+
+### POST requests
+
+    char* headers[] = {"Host: myapp.herokuapp.com"};
+    String body = "hello, world";
+    String response;
+    int error = heroku.get("/status", headers, 1, body, &response);
+    Serial.println(response)
+
+## Thanks
+
+@ricardochimal For all his c++ help.  Couldn't have done this without you!

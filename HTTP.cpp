@@ -9,7 +9,52 @@ int HTTP::begin(byte mac[]){
 }
 
 
-int HTTP::get(const char* path, char** headers, String* response){
+int HTTP::post(const char* path, char** headers, int num_headers,
+                String body, String* response){
+
+  Serial.println("connect HTTP POST");
+  Serial.println(path);
+
+  if(http_client.connect(base_url, 80)){
+    Serial.println("connected");
+    // Make a HTTP request:
+    String request_line = String("POST ") + String(path) + String(" HTTP/1.1");
+    http_client.println(request_line);
+    Serial.println(request_line);
+
+    for(int i=0; i < num_headers; i++){
+      http_client.println(headers[i]);
+   //   Serial.println(headers[i]);
+    }
+    http_client.println(String("Content-Length: ") + body.length());
+    Serial.println(String("Content-Length: ") + body.length());
+    http_client.println("Content-Type: application/x-www-form-urlencoded");
+    http_client.println("Connection: close");
+    http_client.println();
+    http_client.print(body);
+    http_client.println();
+
+    //make sure you write all those bytes.
+    http_client.flush();
+    //aaaaaand give it some time
+    delay(10);
+
+    Serial.println("read HTTP");
+    response->concat(this->readResponse());
+
+    //cleanup
+    http_client.stop();
+
+    return 0;
+  }else{
+    Serial.println("HTTP Connection failed");
+    return 1;
+  }
+
+}
+
+int HTTP::get(const char* path, char** headers,
+                int num_headers, String* response){
 
   Serial.println("connect HTTP GET");
   Serial.println(path);
@@ -17,12 +62,10 @@ int HTTP::get(const char* path, char** headers, String* response){
   if(http_client.connect(base_url, 80)){
     Serial.println("connected");
     // Make a HTTP request:
-    String request_line = String("GET ") + String(path) + String(" HTTP/1.0");
+    String request_line = String("GET ") + String(path) + String(" HTTP/1.1");
     http_client.println(request_line);
     //Serial.println(request_line);
-    int length = sizeof(headers) / sizeof(char*);
-    //Serial.println(length);
-    for(int i=0; i<=length; i++){
+    for(int i=0; i<num_headers; i++){
       http_client.println(headers[i]);
    //   Serial.println(headers[i]);
     }
