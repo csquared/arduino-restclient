@@ -103,4 +103,4 @@ void loop(){
 
 [ricardochimal](https://github.com/ricardochimal) For all his c++ help.  Couldn't have done this without you!
 
-[theycallmeswift](https://github.com/theycallmeswift) Helping incept debug v1.0
+[theycallmeswift](https://github.com/theycallmeswift) Helping incept and debug v1.0
