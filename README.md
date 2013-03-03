@@ -64,6 +64,7 @@ void test_response(){
 
 
 char* headers[] = {"X-Test-Header: true"};
+String post_body = "POSTDATA";
 
 void loop(){
 
