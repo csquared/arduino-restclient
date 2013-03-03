@@ -70,7 +70,49 @@ int HTTP::get(String path, String* [1], String* response){
 }
 */
 
+// POST path and body
+int HTTP::post(const char* path, String body){
+  post(String(path), body);
+}
 
+int HTTP::post(String path, String body){
+  String response = "";
+  char* headers[] = {};
+  return request(String("POST"), path, headers, 0, body, false, &response);
+}
+
+// POST path and body and response
+int HTTP::post(const char* path, String body, String* response){
+  post(String(path), body, response);
+}
+
+int HTTP::post(String path, String body, String* response){
+  char* headers[] = {};
+  return request(String("POST"), path, headers, 0, body, true, response);
+}
+
+// POST path and body and headers
+int HTTP::post(const char* path, String body, char** headers, int num_headers){
+  post(String(path), body, headers, num_headers);
+}
+
+int HTTP::post(String path, String body, char** headers, int num_headers){
+  String response = "";
+  return request(String("POST"), path, headers, num_headers, body, false, &response);
+}
+
+// POST path and body and headers and response
+int HTTP::post(const char* path, String body, char** headers, int num_headers, String* response){
+  post(String(path), body, headers, num_headers, response);
+}
+
+int HTTP::post(String path, String body, char** headers, int num_headers, String* response){
+  return request(String("POST"), path, headers, num_headers, body, true, response);
+}
+
+
+// The mother- generic request method.
+//
 int HTTP::request(String method, String path, char** headers, int num_headers,
                         String body, bool read_response, String* response){
 
