@@ -13,6 +13,13 @@ HTTP::HTTP(const char* _host){
   null_body = NULL;
 }
 
+void HTTP::dhcp(){
+  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+  if (begin(mac) == 0) {
+    Serial.println("Failed to configure Ethernet using DHCP");
+  }
+}
+
 int HTTP::begin(byte mac[]){
   return Ethernet.begin(mac);
 }

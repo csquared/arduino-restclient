@@ -7,6 +7,7 @@ class HTTP {
   public:
     HTTP(const char* host);
 
+    void dhcp();
     int begin(byte*);
 
     int request(String method, String path, char** headers, int num_headers, String body, bool, String* response);
