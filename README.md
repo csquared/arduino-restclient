@@ -105,11 +105,7 @@ void setup() {
 
   // Connect via DHCP
   Serial.println("dhcp");
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  if (heroku.begin(mac) == 0) {
-     Serial.println("Failed to configure Ethernet using DHCP");
-  }
-
+  heroku.dhcp()
   Serial.println("Setup!");
 }
 
