@@ -14,7 +14,7 @@ where `~/Documents/Arduino` is your sketchbook directory.
 
 # Usage
 
-## Include
+### Include
 
 You need to have the `Ethernet` library already included.
 
