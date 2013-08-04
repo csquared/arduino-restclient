@@ -38,9 +38,21 @@ Use a local IP and an explicit port:
 HTTP server = HTTP("192.168.1.50",5000);
 ```
 
+### HTTP::dhcp
+
+Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`
+
+```c++
+  server.dhcp()
+```
+
+Note: you can have multiple HTTP objects but only need to call
+this once.
+
 ### HTTP::begin
 
 It just wraps the `EthernetClient` call to `begin` and DHCPs.
+Use this if you need to explicitly set the mac address.
 
 ```c++
   byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
