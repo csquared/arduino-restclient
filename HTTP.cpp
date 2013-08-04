@@ -132,40 +132,40 @@ int HTTP::request(String method, String path, char** headers, int num_headers,
 
   HTTP_DEBUG_PRINT("HTTP: connect");
 
-  if(http_client.connect(host, port)){
+  if(client.connect(host, port)){
     HTTP_DEBUG_PRINT("HTTP: connected");
     // Make a HTTP request:
     String request_line = String(method) + String(" ") + path + String(" HTTP/1.1");
-    http_client.println(request_line);
+    client.println(request_line);
     HTTP_DEBUG_PRINT(String("REQUEST LINE: ") + request_line);
     for(int i=0; i<num_headers; i++){
-      http_client.println(headers[i]);
+      client.println(headers[i]);
       HTTP_DEBUG_PRINT(String("HEADER: ") + String(headers[i]));
     }
 
-    http_client.println("Host: " + String(host));
+    client.println("Host: " + String(host));
     HTTP_DEBUG_PRINT(String("HEADER: Host: ") + String(host));
     ///
-    http_client.println("Connection: close");
+    client.println("Connection: close");
     HTTP_DEBUG_PRINT("HEADER: Connection: close");
 
     if(body != NULL){
-      http_client.println(String("Content-Length: ") + body.length());
+      client.println(String("Content-Length: ") + body.length());
       HTTP_DEBUG_PRINT(String("HEADER: Content-Length: ") + body.length());
-      http_client.println("Content-Type: application/x-www-form-urlencoded");
+      client.println("Content-Type: application/x-www-form-urlencoded");
       HTTP_DEBUG_PRINT("HEADER: Content-Type: application/x-www-form-urlencoded");
     }
 
-    http_client.println();
+    client.println();
 
     if(body != NULL){
       HTTP_DEBUG_PRINT("HTTP: post body ");
-      http_client.print(body);
+      client.print(body);
       HTTP_DEBUG_PRINT(body);
-      http_client.println();
+      client.println();
     }
     //make sure you write all those bytes.
-    http_client.flush();
+    client.flush();
     //aaaaaand give it some time
     delay(10);
 
@@ -177,7 +177,7 @@ int HTTP::request(String method, String path, char** headers, int num_headers,
 
     //cleanup
     HTTP_DEBUG_PRINT("HTTP: stop client");
-    http_client.stop();
+    client.stop();
     HTTP_DEBUG_PRINT("HTTP: client stopped");
 
     return 0;
@@ -193,10 +193,10 @@ void HTTP::readResponse(String* response) {
   boolean currentLineIsBlank = true;
   boolean httpBody = false;
 
-  while (http_client.connected()) {
-    if (http_client.available()) {
+  while (client.connected()) {
+    if (client.available()) {
 
-      char c = http_client.read();
+      char c = client.read();
 
       if(httpBody){
         response->concat(c);

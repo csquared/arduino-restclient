@@ -46,7 +46,7 @@ class HTTP {
     int post(String path, String body, char **, int, String*);
 
   private:
-    EthernetClient http_client;
+    EthernetClient client;
     void readResponse(String*);
     const char* host;
     int port;
