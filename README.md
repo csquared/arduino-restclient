@@ -83,7 +83,7 @@ server.post("/", &response);
 
 ## Full Example
 
-I test every way of calling the library against a public heroku app.
+I test every way of calling the library (against a public heroku app)[https://github.com/csquared/arduino-http-test].
 
 This means you can cut and paste the following into Arduino IDE and you can cofirm you are up and running
 with the library.
