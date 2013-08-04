@@ -6,6 +6,7 @@ class HTTP {
 
   public:
     HTTP(const char* host);
+    HTTP(const char* _host, int _port);
 
     void dhcp();
     int begin(byte*);
@@ -48,5 +49,6 @@ class HTTP {
     EthernetClient http_client;
     void readResponse(String*);
     const char* host;
+    int port;
     String null_body;
 };

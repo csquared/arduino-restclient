@@ -10,6 +10,13 @@
 
 HTTP::HTTP(const char* _host){
   host = _host;
+  port = 80;
+  null_body = NULL;
+}
+
+HTTP::HTTP(const char* _host, int _port){
+  host = _host;
+  port = _port;
   null_body = NULL;
 }
 
@@ -125,7 +132,7 @@ int HTTP::request(String method, String path, char** headers, int num_headers,
 
   HTTP_DEBUG_PRINT("HTTP: connect");
 
-  if(http_client.connect(host, 80)){
+  if(http_client.connect(host, port)){
     HTTP_DEBUG_PRINT("HTTP: connected");
     // Make a HTTP request:
     String request_line = String(method) + String(" ") + path + String(" HTTP/1.1");
