@@ -14,10 +14,68 @@ where `~/Documents/Arduino` is your sketchbook directory.
 
 # Usage
 
+## Include
+
+You need to have the `Ethernet` library already included.
+
+```c++
+#include <Ethernet.h>
+#include <SPI.h>
+#include "HTTP.h"
+```
+
+### HTTP(host/ip, [port])
+
+Constructor to create an HTTP object to make requests against.
+
+Use domain name and default to port 80:
+```c++
+HTTP server = HTTP("arduino-http-lib-test.herokuapp.com");
+```
+
+Use a local IP and an explicit port:
+```c++
+HTTP server = HTTP("192.168.1.50",5000);
+```
+
+### HTTP::begin
+
+It just wraps the `EthernetClient` call to `begin` and DHCPs.
+
+```c++
+  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+  if (server.begin(mac) == 0) {
+     Serial.println("Failed to configure Ethernet using DHCP");
+  }
+```
+
+### HTTP::get
+
+Start making requests!
+
+```c++
+server.get("/"));
+```
+
+Pass in a string by reference for the response:
+```
+String response = "";
+server.get("/", &response);
+```
+
+### HTTP::post
+```
+String response = "";
+server.post("/", &response);
+```
+
+## Full Example
+
 I test every way of calling the library against a public heroku app.
 
 This means you can cut and paste the following into Arduino IDE and you can cofirm you are up and running
 with the library.
+
 
 ```c++
 
