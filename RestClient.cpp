@@ -9,7 +9,10 @@
 #endif
 
 RestClient::RestClient(const char* _host){
-  RestClient(_host, 80);
+  host = _host;
+  port = 80;
+  num_headers = 0;
+  contentTypeSet = false;
 }
 
 RestClient::RestClient(const char* _host, int _port){

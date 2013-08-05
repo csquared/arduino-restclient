@@ -107,15 +107,11 @@ with the library.
 #include <SPI.h>
 #include "RestClient.h"
 
-#include <Ethernet.h>
-#include <SPI.h>
-#include "RestClient.h"
-
 int test_delay = 1000; //so we don't spam the API
 boolean describe_tests = true;
 
-//HTTP client = HTTP("arduino-http-lib-test.herokuapp.com");
-RestClient client  = RestClient("10.0.1.47",5000);
+RestClient client = RestClient("arduino-http-lib-test.herokuapp.com");
+//RestClient client  = RestClient("10.0.1.47",5000);
 
 
 //Setup
