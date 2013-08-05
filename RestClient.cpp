@@ -1,5 +1,7 @@
 #include "RestClient.h"
 
+#define HTTP_DEBUG
+
 #ifdef HTTP_DEBUG
 #define HTTP_DEBUG_PRINT(string) (Serial.print(string))
 #endif
@@ -128,12 +130,12 @@ int RestClient::request(const char* method, const char* path,
 
     if(body != NULL){
       write(body);
-      write("\n");
+      write("\r\n");
     }
     //make sure you write all those bytes.
     client.flush();
     //aaaaaand give it some time
-    delay(5);
+    delay(10);
 
     if(response != NULL){
       HTTP_DEBUG_PRINT("HTTP: call readResponse\n");
