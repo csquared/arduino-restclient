@@ -1,4 +1,4 @@
-# HTTP for Arduino
+# RestClient for Arduino
 
 HTTP Request library for Arduino and the Ethernet shield.
 
@@ -21,24 +21,24 @@ You need to have the `Ethernet` library already included.
 ```c++
 #include <Ethernet.h>
 #include <SPI.h>
-#include "HTTP.h"
+#include "RestClient.h"
 ```
 
-### HTTP(host/ip, [port])
+### RestClient(host/ip, [port])
 
-Constructor to create an HTTP object to make requests against.
+Constructor to create an RestClient object to make requests against.
 
 Use domain name and default to port 80:
 ```c++
-HTTP server = HTTP("arduino-http-lib-test.herokuapp.com");
+RestClient server = RestClient("arduino-http-lib-test.herokuapp.com");
 ```
 
 Use a local IP and an explicit port:
 ```c++
-HTTP server = HTTP("192.168.1.50",5000);
+RestClient server = RestClient("192.168.1.50",5000);
 ```
 
-### HTTP::dhcp
+### RestClient::dhcp
 
 Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`
 
@@ -46,10 +46,10 @@ Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`
   server.dhcp()
 ```
 
-Note: you can have multiple HTTP objects but only need to call
+Note: you can have multiple RestClient objects but only need to call
 this once.
 
-### HTTP::begin
+### RestClient::begin
 
 It just wraps the `EthernetClient` call to `begin` and DHCPs.
 Use this if you need to explicitly set the mac address.
@@ -61,7 +61,7 @@ Use this if you need to explicitly set the mac address.
   }
 ```
 
-### HTTP::get
+### RestClient::get
 
 Start making requests!
 
@@ -75,7 +75,7 @@ String response = "";
 server.get("/", &response);
 ```
 
-### HTTP::post
+### RestClient::post
 ```
 String response = "";
 server.post("/", &response);
@@ -93,74 +93,8 @@ with the library.
 
 #include <Ethernet.h>
 #include <SPI.h>
-#include "HTTP.h"
+#include "RestClient.h"
 
-int test_delay = 2000; //so we don't spam the API
-
-HTTP heroku = HTTP("arduino-http-lib-test.herokuapp.com");
-
-//Setup
-void setup() {
-  Serial.begin(9600);
-
-  // Connect via DHCP
-  Serial.println("dhcp");
-  heroku.dhcp()
-  Serial.println("Setup!");
-}
-
-void test_connect(int error){
-   delay(test_delay);
-   if(error == 1){
-    Serial.println("TEST RESULT: fail");
-   }else{
-    Serial.println("TEST RESULT: ok");
-   }
-}
-
-String response;
-void test_response(){
-  if(response == "OK"){
-   Serial.println("TEST RESULT: ok");
-  }else{
-   Serial.println("TEST RESULT: fail");
-  }
-  response = "";
-}
-
-
-char* headers[] = {"X-Test-Header: true"};
-String post_body = "POSTDATA";
-
-void loop(){
-
-  Serial.println("Test GET with path");
-  test_connect(heroku.get("/get"));
-
-  Serial.println("Test GET with path and respnose");
-  test_connect(heroku.get("/get", &response));
-  test_response();
-
-  Serial.println("Test GET with path and headers");
-  test_connect(heroku.get("/get-header", headers, 1));
-
-  Serial.println("Test GET with path and headers and response");
-  test_connect(heroku.get("/get-header", headers, 1, &response));
-  test_response();
-
-  Serial.println("Test POST with path and body");
-  test_connect(heroku.post("/post", post_body));
-
-  Serial.println("Test POST with path and body and response");
-  test_connect(heroku.post("/post", post_body, &response));
-  test_response();
-
-  Serial.println("Test POST with path and body and headers");
-  test_connect(heroku.post("/post", post_body, headers, 1));
-
-  Serial.println("Test POST with path and body and headers and response");
-  test_connect(heroku.post("/post", post_body, headers, 1, &response));
-  test_response();
 
 }
 
