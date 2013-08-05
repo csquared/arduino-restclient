@@ -1,7 +1,5 @@
 #include "RestClient.h"
 
-#define HTTP_DEBUG
-
 #ifdef HTTP_DEBUG
 #define HTTP_DEBUG_PRINT(string) (Serial.print(string))
 #endif
