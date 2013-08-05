@@ -10,7 +10,7 @@ where `~/Documents/Arduino` is your sketchbook directory.
     > cd ~/Documents/Arduino
     > mkdir libraries
     > cd libraries
-    > git clone https://github.com/csquared/arduino-http.git HTTP
+    > git clone https://github.com/csquared/arduino-restclient.git RestClient
 
 # Usage
 
