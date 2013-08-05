@@ -269,8 +269,6 @@ void loop(){
   DELETE_tests();
 }
 
-}
-
 ```
 
 # Thanks
