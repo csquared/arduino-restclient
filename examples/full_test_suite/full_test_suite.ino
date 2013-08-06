@@ -28,12 +28,12 @@ void setup() {
   Serial.println("Setup!");
 }
 
-void test_connect(int error){
+void test_status(int statusCode){
    delay(test_delay);
-   if(error == 1){
-    Serial.println("TEST RESULT: fail (connect)");
-   }else{
+   if(statusCode == 200){
     Serial.println("TEST RESULT: ok (connect)");
+   }else{
+    Serial.println("TEST RESULT: fail (connect)");
    }
 }
 
@@ -57,101 +57,101 @@ char* post_body = "POSTDATA";
 
 void GET_tests(){
   describe("Test GET with path");
-  test_connect(client.get("/get"));
+  test_status(client.get("/get"));
 
   describe("Test GET with path and response");
-  test_connect(client.get("/get", &response));
+  test_status(client.get("/get", &response));
   test_response();
 
   describe("Test GET with path and header");
   client.setHeader("X-Test-Header: true");
-  test_connect(client.get("/get-header"));
+  test_status(client.get("/get-header"));
 
   describe("Test GET with path and header and response");
   client.setHeader("X-Test-Header: true");
-  test_connect(client.get("/get-header", &response));
+  test_status(client.get("/get-header", &response));
   test_response();
 
   describe("Test GET with 2 headers and response");
   client.setHeader("X-Test-Header1: one");
   client.setHeader("X-Test-Header2: two");
-  test_connect(client.get("/get-headers", &response));
+  test_status(client.get("/get-headers", &response));
   test_response();
 }
 
 void POST_tests(){
     // POST TESTS
   describe("Test POST with path and body");
-  test_connect(client.post("/data", post_body));
+  test_status(client.post("/data", post_body));
 
   describe("Test POST with path and body and response");
-  test_connect(client.post("/data", post_body, &response));
+  test_status(client.post("/data", post_body, &response));
   test_response();
 
   describe("Test POST with path and body and header");
   client.setHeader("X-Test-Header: true");
-  test_connect(client.post("/data-header", post_body));
+  test_status(client.post("/data-header", post_body));
 
   describe("Test POST with path and body and header and response");
   client.setHeader("X-Test-Header: true");
-  test_connect(client.post("/data-header", post_body, &response));
+  test_status(client.post("/data-header", post_body, &response));
   test_response();
 
   describe("Test POST with 2 headers and response");
   client.setHeader("X-Test-Header1: one");
   client.setHeader("X-Test-Header2: two");
-  test_connect(client.post("/data-headers", post_body, &response));
+  test_status(client.post("/data-headers", post_body, &response));
   test_response();
 }
 
 void PUT_tests(){
   describe("Test PUT with path and body");
-  test_connect(client.put("/data", post_body));
+  test_status(client.put("/data", post_body));
 
   describe("Test PUT with path and body and response");
-  test_connect(client.put("/data", post_body, &response));
+  test_status(client.put("/data", post_body, &response));
   test_response();
 
   describe("Test PUT with path and body and header");
   client.setHeader("X-Test-Header: true");
-  test_connect(client.put("/data-header", post_body));
+  test_status(client.put("/data-header", post_body));
 
   describe("Test PUT with path and body and header and response");
   client.setHeader("X-Test-Header: true");
-  test_connect(client.put("/data-header", post_body, &response));
+  test_status(client.put("/data-header", post_body, &response));
   test_response();
 
   describe("Test PUT with 2 headers and response");
   client.setHeader("X-Test-Header1: one");
   client.setHeader("X-Test-Header2: two");
-  test_connect(client.put("/data-headers", post_body, &response));
+  test_status(client.put("/data-headers", post_body, &response));
   test_response();
 }
 
 void DELETE_tests(){
   describe("Test DELETE with path");
-  test_connect(client.del("/data"));
+  test_status(client.del("/data"));
 
   describe("Test DELETE with path and body");
-  test_connect(client.del("/data", post_body));
+  test_status(client.del("/data", post_body));
 
   describe("Test DELETE with path and body and response");
-  test_connect(client.del("/data", post_body, &response));
+  test_status(client.del("/data", post_body, &response));
   test_response();
 
   describe("Test DELETE with path and body and header");
   client.setHeader("X-Test-Header: true");
-  test_connect(client.del("/data-header", post_body));
+  test_status(client.del("/data-header", post_body));
 
   describe("Test DELETE with path and body and header and response");
   client.setHeader("X-Test-Header: true");
-  test_connect(client.del("/data-header", post_body, &response));
+  test_status(client.del("/data-header", post_body, &response));
   test_response();
 
   describe("Test DELETE with 2 headers and response");
   client.setHeader("X-Test-Header1: one");
   client.setHeader("X-Test-Header2: two");
-  test_connect(client.del("/data-headers", post_body, &response));
+  test_status(client.del("/data-headers", post_body, &response));
   test_response();
 }
 

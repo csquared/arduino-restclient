@@ -40,7 +40,7 @@ class RestClient {
 
   private:
     EthernetClient client;
-    void readResponse(String*);
+    int readResponse(String*);
     void write(const char*);
     const char* host;
     int port;

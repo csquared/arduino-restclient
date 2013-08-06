@@ -1,5 +1,7 @@
 #include "RestClient.h"
 
+#define HTTP_DEBUG
+
 #ifdef HTTP_DEBUG
 #define HTTP_DEBUG_PRINT(string) (Serial.print(string))
 #endif
@@ -136,13 +138,11 @@ int RestClient::request(const char* method, const char* path,
     //make sure you write all those bytes.
     client.flush();
     //aaaaaand give it some time
-    delay(10);
+    delay(20);
 
-    if(response != NULL){
-      HTTP_DEBUG_PRINT("HTTP: call readResponse\n");
-      readResponse(response);
-      HTTP_DEBUG_PRINT("HTTP: return readResponse\n");
-    }
+    HTTP_DEBUG_PRINT("HTTP: call readResponse\n");
+    int statusCode = readResponse(response);
+    HTTP_DEBUG_PRINT("HTTP: return readResponse\n");
 
     //cleanup
     num_headers = 0;
@@ -150,29 +150,51 @@ int RestClient::request(const char* method, const char* path,
     client.stop();
     HTTP_DEBUG_PRINT("HTTP: client stopped\n");
 
-    return 0;
+    return statusCode;
   }else{
     HTTP_DEBUG_PRINT("HTTP Connection failed\n");
-    return 1;
+    return 0;
   }
 }
 
-void RestClient::readResponse(String* response) {
+int RestClient::readResponse(String* response) {
 
   // an http request ends with a blank line
   boolean currentLineIsBlank = true;
   boolean httpBody = false;
+  boolean inStatus = false;
 
+  char statusCode[4];
+  int i = 0;
+
+  HTTP_DEBUG_PRINT("HTTP: wait for connect\n");
+  HTTP_DEBUG_PRINT("HTTP: Response body:\n");
   while (client.connected()) {
     if (client.available()) {
 
       char c = client.read();
+      HTTP_DEBUG_PRINT(c);
+
+      if(c == ' ' && !inStatus){
+        inStatus = true;
+      }
+
+      if(inStatus && i < 3 && c != ' '){
+        statusCode[i] = c;
+        i++;
+      }
+      if(i == 3){
+        statusCode[i] = '\0';
+      }
+      if(i == 3 && response == NULL){
+        return atoi(statusCode);
+      }
 
       if(httpBody){
         response->concat(c);
       }
       if (c == '\n' && httpBody){
-        return;
+        return atoi(statusCode);
       }
       if (c == '\n' && currentLineIsBlank) {
         httpBody = true;
@@ -188,5 +210,5 @@ void RestClient::readResponse(String* response) {
     }
   }
 
-  return;
+  return atoi(statusCode);
 }

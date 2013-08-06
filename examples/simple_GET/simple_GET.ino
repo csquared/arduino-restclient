@@ -25,8 +25,10 @@ void setup() {
 String response;
 void loop(){
   response = "";
-  client.get("/get", &response);
-  Serial.print("Response from server: ");
+  int statusCode = client.get("/get", &response);
+  Serial.print("Status code from server: ");
+  Serial.println(statusCode);
+  Serial.print("Response body from server: ");
   Serial.println(response);
   delay(1000);
 }
