@@ -130,7 +130,8 @@ void PUT_tests(){
 
 void DELETE_tests(){
   describe("Test DELETE with path");
-  test_status(client.del("/data"));
+  //note: requires a special endpoint
+  test_status(client.del("/del"));
 
   describe("Test DELETE with path and body");
   test_status(client.del("/data", post_body));
