@@ -30,67 +30,109 @@ Constructor to create an RestClient object to make requests against.
 
 Use domain name and default to port 80:
 ```c++
-RestClient server = RestClient("arduino-http-lib-test.herokuapp.com");
+RestClient client = RestClient("arduino-http-lib-test.herokuapp.com");
 ```
 
 Use a local IP and an explicit port:
 ```c++
-RestClient server = RestClient("192.168.1.50",5000);
+RestClient client = RestClient("192.168.1.50",5000);
 ```
 
-### RestClient::dhcp
+### dhcp()
 
 Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`
 
 ```c++
-  server.dhcp()
+  client.dhcp()
 ```
 
 Note: you can have multiple RestClient objects but only need to call
 this once.
 
-### RestClient::begin
+Note: if you have multiple Arduinos on the same network, you'll need
+to give each one a different mac address.
+
+### begin(byte mac[])
 
 It just wraps the `EthernetClient` call to `begin` and DHCPs.
 Use this if you need to explicitly set the mac address.
 
 ```c++
   byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  if (server.begin(mac) == 0) {
+  if (client.begin(mac) == 0) {
      Serial.println("Failed to configure Ethernet using DHCP");
   }
 ```
 
-### RestClient::get
+### Manual Ethernet Setup
+
+You can skip the above methods and just configure the EthernetClient yourself:
+
+```c++
+  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+  //the IP address for the shield:
+  byte ip[] = { 192, 168, 2, 11 };
+  Ethernet.begin(mac,ip);
+```
+
+```c++
+  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+  Ethernet.begin(mac);
+```
+
+This is especially useful for debugging network connection issues.
+
+## RESTful methods
+
+All methods return an HTTP status code or 0 if there was an error.
+
+### `get(const char*)`
+### `get(const char*, String * response)`
 
 Start making requests!
 
 ```c++
-server.get("/"));
+int statusCode = client.get("/"));
 ```
 
 Pass in a string by reference for the response:
 ```
 String response = "";
-server.get("/", &response);
+int statusCode = client.get("/", &response);
 ```
 
-### RestClient::post
+### post(const char* path, const char* body)
+### post(const char* path, String* response)
+### post(const char* path, const char* body, String* response)
+
 ```
 String response = "";
-server.post("/", &response);
+int statusCode = client.post("/", &response);
+statusCode = client.post("/", "foo=bar");
+response = "";
+statusCode = client.post("/", "foo=bar", &response);
 ```
 
-### RestClient::put
+### put(const char* path, const char* body)
+### put(const char* path, String* response)
+### put(const char* path, const char* body, String* response)
+
 ```
 String response = "";
-server.put("/", &response);
+int statusCode = client.put("/", &response);
+statusCode = client.put("/", "foo=bar");
+response = "";
+statusCode = client.put("/", "foo=bar", &response);
 ```
 
-### RestClient::del
+### del(const char* path)
+### put(const char* path, const char* body)
+### put(const char* path, String* response)
+### put(const char* path, const char* body, String* response)
+
 ```
 String response = "";
-server.del("/", &response);
+int statusCode = client.del("/", &response);
 ```
 
 ## Full Example
@@ -270,6 +312,16 @@ void loop(){
 }
 
 ```
+
+## Debug Mode
+
+If you're having trouble, you can always open `RestClient.cpp` and throw at the top:
+
+```c++
+#define HTTP_DEBUG
+```
+
+Everything happening in the client will get printed to the Serial port.
 
 # Thanks
 

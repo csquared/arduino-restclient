@@ -17,7 +17,7 @@ void setup() {
   client.dhcp();
 
 /*
-  Can still fall back to manual config:
+  //Can still fall back to manual config:
 
   byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
   //the IP address for the shield:

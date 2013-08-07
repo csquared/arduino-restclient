@@ -1,7 +1,5 @@
 #include "RestClient.h"
 
-#define HTTP_DEBUG
-
 #ifdef HTTP_DEBUG
 #define HTTP_DEBUG_PRINT(string) (Serial.print(string))
 #endif
@@ -167,8 +165,7 @@ int RestClient::readResponse(String* response) {
   char statusCode[4];
   int i = 0;
 
-  HTTP_DEBUG_PRINT("HTTP: wait for connect\n");
-  HTTP_DEBUG_PRINT("HTTP: Response body:\n");
+  HTTP_DEBUG_PRINT("HTTP: RESPONSE: \n");
   while (client.connected()) {
     if (client.available()) {
 
@@ -187,6 +184,7 @@ int RestClient::readResponse(String* response) {
         statusCode[i] = '\0';
       }
       if(i == 3 && response == NULL){
+        HTTP_DEBUG_PRINT("HTTP: return readResponse1");
         return atoi(statusCode);
       }
 
@@ -194,6 +192,7 @@ int RestClient::readResponse(String* response) {
         response->concat(c);
       }
       if (c == '\n' && httpBody){
+        HTTP_DEBUG_PRINT("HTTP: return readResponse2");
         return atoi(statusCode);
       }
       if (c == '\n' && currentLineIsBlank) {
@@ -210,5 +209,6 @@ int RestClient::readResponse(String* response) {
     }
   }
 
+  HTTP_DEBUG_PRINT("HTTP: return readResponse3");
   return atoi(statusCode);
 }
