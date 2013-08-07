@@ -33,7 +33,9 @@ void test_status(int statusCode){
    if(statusCode == 200){
     Serial.println("TEST RESULT: ok (connect)");
    }else{
-    Serial.println("TEST RESULT: fail (connect)");
+    Serial.print("TEST RESULT: fail (");
+    Serial.print(statusCode);
+    Serial.println(")");
    }
 }
 
