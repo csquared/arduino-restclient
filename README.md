@@ -86,8 +86,8 @@ This is especially useful for debugging network connection issues.
 
 All methods return an HTTP status code or 0 if there was an error.
 
-### `get(const char*)`
-### `get(const char*, String * response)`
+### `get(const char* path)`
+### `get(const char* path, String* response)`
 
 Start making requests!
 
@@ -95,7 +95,7 @@ Start making requests!
 int statusCode = client.get("/"));
 ```
 
-Pass in a string by reference for the response:
+Pass in a string *by reference* for the response:
 ```
 String response = "";
 int statusCode = client.get("/", &response);
@@ -126,9 +126,9 @@ statusCode = client.put("/", "foo=bar", &response);
 ```
 
 ### del(const char* path)
-### put(const char* path, const char* body)
-### put(const char* path, String* response)
-### put(const char* path, const char* body, String* response)
+### del(const char* path, const char* body)
+### del(const char* path, String* response)
+### del(const char* path, const char* body, String* response)
 
 ```
 String response = "";
@@ -140,7 +140,6 @@ int statusCode = client.del("/", &response);
 I test every way of calling the library (against a public heroku app)[https://github.com/csquared/arduino-http-test].
 
 You can find the file in File->Examples->RestClient->full_test_suite
-```
 
 ## Debug Mode
 
