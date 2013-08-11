@@ -31,7 +31,9 @@ void setup() {
 void test_status(int statusCode){
    delay(test_delay);
    if(statusCode == 200){
-    Serial.println("TEST RESULT: ok (connect)");
+    Serial.print("TEST RESULT: ok (");
+    Serial.print(statusCode);
+    Serial.println(")");
    }else{
     Serial.print("TEST RESULT: fail (");
     Serial.print(statusCode);

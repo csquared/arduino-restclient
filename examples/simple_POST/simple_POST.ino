@@ -25,7 +25,7 @@ void setup() {
 String response;
 void loop(){
   response = "";
-  int statusCode = client.get("/get", &response);
+  int statusCode = client.post("/data", "POSTDATA", &response);
   Serial.print("Status code from server: ");
   Serial.println(statusCode);
   Serial.print("Response body from server: ");
