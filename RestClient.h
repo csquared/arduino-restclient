@@ -21,14 +21,17 @@ class RestClient {
     int get(const char*);
     // GET path and response
     int get(const char*, String*);
+
     // POST path and body
     int post(const char* path, const char* body);
     // POST path and body and response
     int post(const char* path, const char* body, String*);
+
     // PUT path and body
     int put(const char* path, const char* body);
     // PUT path and body and response
     int put(const char* path, const char* body, String*);
+
     // DELETE path
     int del(const char*);
     // DELETE path and body
@@ -40,11 +43,11 @@ class RestClient {
 
   private:
     EthernetClient client;
-    void readResponse(String*);
+    int readResponse(String*);
     void write(const char*);
     const char* host;
     int port;
     int num_headers;
     const char* headers[10];
-    bool contentTypeSet;
+    boolean contentTypeSet;
 };
