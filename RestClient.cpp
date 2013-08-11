@@ -196,18 +196,16 @@ int RestClient::readResponse(String* response) {
       }
       if(i == 3){
         statusCode[i] = '\0';
-      }
-      if(i == 3 && response == NULL){
-        HTTP_DEBUG_PRINT("HTTP: return readResponse1");
-        return atoi(statusCode);
+        code = atoi(statusCode);
       }
 
+      //only write response if its not null
       if(httpBody){
-        response->concat(c);
+        if(response != NULL) response->concat(c);
       }
       if (c == '\n' && httpBody){
-        HTTP_DEBUG_PRINT("HTTP: return readResponse2");
-        return atoi(statusCode);
+        HTTP_DEBUG_PRINT("HTTP: return readResponse2\n");
+        return code;
       }
       if (c == '\n' && currentLineIsBlank) {
         httpBody = true;
@@ -223,6 +221,6 @@ int RestClient::readResponse(String* response) {
     }
   }
 
-  HTTP_DEBUG_PRINT("HTTP: return readResponse3");
-  return atoi(statusCode);
+  HTTP_DEBUG_PRINT("HTTP: return readResponse3\n");
+  return code;
 }
