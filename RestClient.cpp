@@ -27,10 +27,14 @@ void RestClient::dhcp(){
   if (begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
   }
+  //give it time to initialize
+  delay(1000);
 }
 
 int RestClient::begin(byte mac[]){
   return Ethernet.begin(mac);
+  //give it time to initialize
+  delay(1000);
 }
 
 // GET path
