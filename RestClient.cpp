@@ -87,9 +87,9 @@ int RestClient::del(const char* path, const char* body, String* response){
   return request("DELETE", path, body, response);
 }
 
-void RestClient::write(const char* c){
-  HTTP_DEBUG_PRINT(c);
-  client.print(c);
+void RestClient::write(const char* string){
+  HTTP_DEBUG_PRINT(string);
+  client.print(string);
 }
 
 void RestClient::setHeader(const char* header){
@@ -168,10 +168,19 @@ int RestClient::readResponse(String* response) {
 
   char statusCode[4];
   int i = 0;
+  int code = 0;
+
+  if(response == NULL){
+    HTTP_DEBUG_PRINT("HTTP: NULL RESPONSE POINTER: \n");
+  }else{
+    HTTP_DEBUG_PRINT("HTTP: NON-NULL RESPONSE POINTER: \n");
+  }
 
   HTTP_DEBUG_PRINT("HTTP: RESPONSE: \n");
   while (client.connected()) {
+    HTTP_DEBUG_PRINT(".");
     if (client.available()) {
+      HTTP_DEBUG_PRINT(",");
 
       char c = client.read();
       HTTP_DEBUG_PRINT(c);
