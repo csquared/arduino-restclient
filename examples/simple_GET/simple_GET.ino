@@ -1,3 +1,8 @@
+/* RestClient simple GET request
+ *
+ * by Chris Continanza (csquared)
+ */
+
 #include <Ethernet.h>
 #include <SPI.h>
 #include "RestClient.h"

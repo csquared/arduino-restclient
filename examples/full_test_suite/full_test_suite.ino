@@ -1,3 +1,10 @@
+/* RestClient full test suite
+ *
+ * Every REST method is called.
+ *
+ * by Chris Continanza (csquared)
+ */
+
 #include <Ethernet.h>
 #include <SPI.h>
 #include "RestClient.h"
