@@ -27,10 +27,14 @@ void RestClient::dhcp(){
   if (begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
   }
+  //give it time to initialize
+  delay(1000);
 }
 
 int RestClient::begin(byte mac[]){
   return Ethernet.begin(mac);
+  //give it time to initialize
+  delay(1000);
 }
 
 // GET path
@@ -83,9 +87,9 @@ int RestClient::del(const char* path, const char* body, String* response){
   return request("DELETE", path, body, response);
 }
 
-void RestClient::write(const char* c){
-  HTTP_DEBUG_PRINT(c);
-  client.print(c);
+void RestClient::write(const char* string){
+  HTTP_DEBUG_PRINT(string);
+  client.print(string);
 }
 
 void RestClient::setHeader(const char* header){
@@ -132,47 +136,76 @@ int RestClient::request(const char* method, const char* path,
     if(body != NULL){
       write(body);
       write("\r\n");
+      write("\r\n");
     }
-    //make sure you write all those bytes.
-    client.flush();
-    //aaaaaand give it some time
-    delay(10);
 
-    if(response != NULL){
-      HTTP_DEBUG_PRINT("HTTP: call readResponse\n");
-      readResponse(response);
-      HTTP_DEBUG_PRINT("HTTP: return readResponse\n");
-    }
+    //make sure you write all those bytes.
+    delay(100);
+
+    HTTP_DEBUG_PRINT("HTTP: call readResponse\n");
+    int statusCode = readResponse(response);
+    HTTP_DEBUG_PRINT("HTTP: return readResponse\n");
 
     //cleanup
-    num_headers = 0;
     HTTP_DEBUG_PRINT("HTTP: stop client\n");
+    num_headers = 0;
     client.stop();
+    delay(50);
     HTTP_DEBUG_PRINT("HTTP: client stopped\n");
 
-    return 0;
+    return statusCode;
   }else{
     HTTP_DEBUG_PRINT("HTTP Connection failed\n");
-    return 1;
+    return 0;
   }
 }
 
-void RestClient::readResponse(String* response) {
+int RestClient::readResponse(String* response) {
 
   // an http request ends with a blank line
   boolean currentLineIsBlank = true;
   boolean httpBody = false;
+  boolean inStatus = false;
 
+  char statusCode[4];
+  int i = 0;
+  int code = 0;
+
+  if(response == NULL){
+    HTTP_DEBUG_PRINT("HTTP: NULL RESPONSE POINTER: \n");
+  }else{
+    HTTP_DEBUG_PRINT("HTTP: NON-NULL RESPONSE POINTER: \n");
+  }
+
+  HTTP_DEBUG_PRINT("HTTP: RESPONSE: \n");
   while (client.connected()) {
+    HTTP_DEBUG_PRINT(".");
     if (client.available()) {
+      HTTP_DEBUG_PRINT(",");
 
       char c = client.read();
+      HTTP_DEBUG_PRINT(c);
 
+      if(c == ' ' && !inStatus){
+        inStatus = true;
+      }
+
+      if(inStatus && i < 3 && c != ' '){
+        statusCode[i] = c;
+        i++;
+      }
+      if(i == 3){
+        statusCode[i] = '\0';
+        code = atoi(statusCode);
+      }
+
+      //only write response if its not null
       if(httpBody){
-        response->concat(c);
+        if(response != NULL) response->concat(c);
       }
       if (c == '\n' && httpBody){
-        return;
+        HTTP_DEBUG_PRINT("HTTP: return readResponse2\n");
+        return code;
       }
       if (c == '\n' && currentLineIsBlank) {
         httpBody = true;
@@ -188,5 +221,6 @@ void RestClient::readResponse(String* response) {
     }
   }
 
-  return;
+  HTTP_DEBUG_PRINT("HTTP: return readResponse3\n");
+  return code;
 }
