@@ -17,6 +17,8 @@ class RestClient {
                 const char* body, String* response);
     // Set a Request Header
     void setHeader(const char*);
+    // Set Content Type
+    void setContentType(const char*);
     // GET path
     int get(const char*);
     // GET path and response
@@ -50,4 +52,5 @@ class RestClient {
     int num_headers;
     const char* headers[10];
     boolean contentTypeSet;
+    const char* contentType;
 };
