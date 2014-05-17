@@ -132,8 +132,8 @@ int RestClient::request(const char* method, const char* path,
 
       if(!contentTypeSet){
         char contentTypeBuff[100];
-		    sprintf(contentTypeBuff, "Content-Type: %s\r\n", contentType);
-		    write(contentTypeBuff);
+        sprintf(contentTypeBuff, "Content-Type: %s\r\n", contentType);
+        write(contentTypeBuff);
       }
     }
 
