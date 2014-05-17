@@ -18,7 +18,7 @@ class RestClient {
     // Set a Request Header
     void setHeader(const char*);
     // Set Content Type
-	  void setContentType(const char*);
+    void setContentType(const char*);
     // GET path
     int get(const char*);
     // GET path and response
