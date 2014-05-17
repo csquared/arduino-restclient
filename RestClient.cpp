@@ -97,6 +97,10 @@ void RestClient::setHeader(const char* header){
   num_headers++;
 }
 
+void RestClient::setContentType(const char* content) {
+  contentType = content;
+}
+
 // The mother- generic request method.
 //
 int RestClient::request(const char* method, const char* path,
@@ -127,7 +131,9 @@ int RestClient::request(const char* method, const char* path,
       write(contentLength);
 
       if(!contentTypeSet){
-        write("Content-Type: application/x-www-form-urlencoded\r\n");
+        char contentTypeBuff[100];
+		    sprintf(contentTypeBuff, "Content-Type: %s\r\n", contentType);
+		    write(contentTypeBuff);
       }
     }
 
