@@ -12,14 +12,14 @@ RestClient::RestClient(const char* _host){
   host = _host;
   port = 80;
   num_headers = 0;
-  contentTypeSet = false;
+  contentType = "x-www-form-urlencoded";	// default
 }
 
 RestClient::RestClient(const char* _host, int _port){
   host = _host;
   port = _port;
   num_headers = 0;
-  contentTypeSet = false;
+  contentType = "x-www-form-urlencoded";	// default
 }
 
 void RestClient::dhcp(){
@@ -97,6 +97,10 @@ void RestClient::setHeader(const char* header){
   num_headers++;
 }
 
+void RestClient::setContentType(const char* contentTypeValue){
+  contentType = contentTypeValue;
+}
+
 // The mother- generic request method.
 //
 int RestClient::request(const char* method, const char* path,
@@ -126,9 +130,9 @@ int RestClient::request(const char* method, const char* path,
       sprintf(contentLength, "Content-Length: %d\r\n", strlen(body));
       write(contentLength);
 
-      if(!contentTypeSet){
-        write("Content-Type: application/x-www-form-urlencoded\r\n");
-      }
+	  write("Content-Type: ");
+	  write(contentType);
+	  write("\r\n");
     }
 
     write("\r\n");
@@ -180,6 +184,12 @@ int RestClient::readResponse(String* response) {
   HTTP_DEBUG_PRINT("HTTP: RESPONSE: \n");
   while (client.connected()) {
     HTTP_DEBUG_PRINT(".");
+	
+	if (!client.available()) {
+        HTTP_DEBUG_PRINT("HTTP: client no longer available\n");
+		return code;
+	}
+	
     if (client.available()) {
       HTTP_DEBUG_PRINT(",");
 
@@ -199,25 +209,25 @@ int RestClient::readResponse(String* response) {
         code = atoi(statusCode);
       }
 
-      //only write response if its not null
       if(httpBody){
+        //only write response if its not null
         if(response != NULL) response->concat(c);
       }
-      if (c == '\n' && httpBody){
-        HTTP_DEBUG_PRINT("HTTP: return readResponse2\n");
-        return code;
-      }
-      if (c == '\n' && currentLineIsBlank) {
-        httpBody = true;
-      }
-      if (c == '\n') {
-        // you're starting a new lineu
-        currentLineIsBlank = true;
-      }
-      else if (c != '\r') {
-        // you've gotten a character on the current line
-        currentLineIsBlank = false;
-      }
+	  else
+	  {
+        if (c == '\n' && currentLineIsBlank) {
+          httpBody = true;
+        }
+
+        if (c == '\n') {
+          // you're starting a new line
+          currentLineIsBlank = true;
+        }
+        else if (c != '\r') {
+          // you've gotten a character on the current line
+          currentLineIsBlank = false;
+        }
+	  }
     }
   }
 
