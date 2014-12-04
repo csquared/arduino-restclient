@@ -184,12 +184,7 @@ int RestClient::readResponse(String* response) {
   HTTP_DEBUG_PRINT("HTTP: RESPONSE: \n");
   while (client.connected()) {
     HTTP_DEBUG_PRINT(".");
-	
-	if (!client.available()) {
-        HTTP_DEBUG_PRINT("HTTP: client no longer available\n");
-		return code;
-	}
-	
+
     if (client.available()) {
       HTTP_DEBUG_PRINT(",");
 
@@ -213,21 +208,21 @@ int RestClient::readResponse(String* response) {
         //only write response if its not null
         if(response != NULL) response->concat(c);
       }
-	  else
-	  {
-        if (c == '\n' && currentLineIsBlank) {
-          httpBody = true;
-        }
+      else
+      {
+          if (c == '\n' && currentLineIsBlank) {
+            httpBody = true;
+          }
 
-        if (c == '\n') {
-          // you're starting a new line
-          currentLineIsBlank = true;
-        }
-        else if (c != '\r') {
-          // you've gotten a character on the current line
-          currentLineIsBlank = false;
-        }
-	  }
+          if (c == '\n') {
+            // you're starting a new line
+            currentLineIsBlank = true;
+          }
+          else if (c != '\r') {
+            // you've gotten a character on the current line
+            currentLineIsBlank = false;
+          }
+      }
     }
   }
 
