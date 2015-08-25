@@ -1,7 +1,4 @@
-#include <Arduino.h>
-#include <SPI.h>
-#include <Ethernet.h>
-
+#include <WiFiClient.h>
 class RestClient {
 
   public:
@@ -45,7 +42,7 @@ class RestClient {
     int del(const char*, const char*, String*);
 
   private:
-    EthernetClient client;
+    WiFiClient client;
     int readResponse(String*);
     void write(const char*);
     const char* host;
