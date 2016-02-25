@@ -12,14 +12,14 @@ RestClient::RestClient(const char* _host){
   host = _host;
   port = 80;
   num_headers = 0;
-  contentType = "x-www-form-urlencoded";	// default
+  contentType = "application/x-www-form-urlencoded";	// default
 }
 
 RestClient::RestClient(const char* _host, int _port){
   host = _host;
   port = _port;
   num_headers = 0;
-  contentType = "x-www-form-urlencoded";	// default
+  contentType = "application/x-www-form-urlencoded";	// default
 }
 
 void RestClient::dhcp(){
