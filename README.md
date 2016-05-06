@@ -1,6 +1,9 @@
 # RestClient for Arduino ESP8266 WiFi modules
 
 HTTP Request library for Arduino and the ESP8266 WiFi SOC modules
+
+This library now supports SSL!  To use with SSL, you need to include the SHA1 fingerprint of the certificate of the site you are connecting to.  You can get this by using a desktop browser and inspecting the SSL cert used at the site.  Please note: this is FRAGILE, if the site updates their SSL, your code will break.  But, there is not enough memory on the ESP8266 to store all the rool certs, so this is a working method.  Se the example below.
+
 This library is derived almost entirely from the great work done here: https://github.com/csquared/arduino-restclient
 
 # Install
@@ -31,6 +34,11 @@ RestClient client = RestClient("arduino-http-lib-test.herokuapp.com");
 Use a local IP and an explicit port:
 ```c++
 RestClient client = RestClient("192.168.1.50",5000);
+```
+
+Use a local IP and an explicit port to an SSL site::
+```c++
+RestClient client = RestClient("www.kudoso.com",443, "EE 16 77 79 55 58 92 46 FB 18 40 99 2E 17 7E AB 32 0A 4A 88");
 ```
 
 ## RESTful methods
