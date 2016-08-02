@@ -40,7 +40,8 @@ RestClient client = RestClient("192.168.1.50",5000);
 
 ### dhcp()
 
-Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`
+Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`. Returns `true` or `false` to indicate if setting up DHCP
+was successful or not
 
 ```c++
   client.dhcp()

@@ -9,7 +9,7 @@ class RestClient {
     RestClient(const char* _host, int _port);
 
     //Client Setup
-    void dhcp();
+    bool dhcp();
     int begin(byte*);
 
     //Generic HTTP Request
