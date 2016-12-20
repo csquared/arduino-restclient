@@ -41,6 +41,11 @@ Use a local IP and an explicit port to an SSL site::
 RestClient client = RestClient("www.kudoso.com",443, "EE 16 77 79 55 58 92 46 FB 18 40 99 2E 17 7E AB 32 0A 4A 88");
 ```
 
+### dhcp()
+
+Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`. Returns `true` or `false` to indicate if setting up DHCP
+was successful or not
+
 ## RESTful methods
 
 All methods return an HTTP status code or 0 if there was an error.

@@ -10,7 +10,7 @@ public:
     RestClient(const char* _host, int _port, const char* _fingerprint);
     
     //Client Setup
-    void dhcp();
+    bool dhcp();
     int begin(byte*);
     
     //Generic HTTP Request
