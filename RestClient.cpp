@@ -11,6 +11,7 @@
 RestClient::RestClient(const char* _host){
     host = _host;
     port = 80;
+    ssl = 0;
     fingerprint = NULL;
     num_headers = 0;
     contentType = "application/x-www-form-urlencoded";  // default
@@ -19,6 +20,7 @@ RestClient::RestClient(const char* _host){
 RestClient::RestClient(const char* _host, int _port){
     host = _host;
     port = _port;
+    ssl = 0;
     fingerprint = NULL;
     num_headers = 0;
     contentType = "application/x-www-form-urlencoded";  // default
@@ -39,7 +41,17 @@ bool RestClient::dhcp(){
 RestClient::RestClient(const char* _host, int _port, const char* _fingerprint){
     host = _host;
     port = _port;
+    ssl = 1;
     fingerprint = _fingerprint;
+    num_headers = 0;
+    contentType = "x-www-form-urlencoded";  // default
+}
+
+RestClient::RestClient(const char* _host, int _port, int _ssl) {
+    host = _host;
+    port = _port;
+    ssl = (_ssl) ? 1 : 0;
+    fingerprint = NULL;
     num_headers = 0;
     contentType = "x-www-form-urlencoded";  // default
 }
@@ -96,7 +108,7 @@ int RestClient::del(const char* path, const char* body, String* response){
 
 void RestClient::write(const char* string){
 
-    if(fingerprint) {
+    if(ssl) {
         HTTP_DEBUG_PRINT("\nSSL Print: ");
         HTTP_DEBUG_PRINT(string);
         sslClient.print(string);
@@ -116,6 +128,10 @@ void RestClient::setContentType(const char* contentTypeValue){
     contentType = contentTypeValue;
 }
 
+void RestClient::setSSL(int _ssl){
+    ssl = (_ssl) ? 1 : 0;
+}
+
 // The mother- generic request method.
 //
 int RestClient::request(const char* method, const char* path,
@@ -123,19 +139,20 @@ int RestClient::request(const char* method, const char* path,
 
     HTTP_DEBUG_PRINT("HTTP: connect\n");
 
-    if (fingerprint) {
+    if (ssl) {
         if(!sslClient.connect(host, port)){
             HTTP_DEBUG_PRINT("HTTPS Connection failed\n");
             return 0;
         }
-        HTTP_DEBUG_PRINT("Verifiying SSL certificate\n");
-        if (sslClient.verify(fingerprint, host)) {
-            HTTP_DEBUG_PRINT("SSL certificate matches\n");
-        } else {
-            HTTP_DEBUG_PRINT("SSL certificate does not match\n");
-            return 0;
+        if (fingerprint) {
+            HTTP_DEBUG_PRINT("Verifiying SSL certificate\n");
+            if (sslClient.verify(fingerprint, host)) {
+                HTTP_DEBUG_PRINT("SSL certificate matches\n");
+            } else {
+                HTTP_DEBUG_PRINT("SSL certificate does not match\n");
+                return 0;
+            }
         }
-
     } else {
         if(!client.connect(host, port)){
             HTTP_DEBUG_PRINT("HTTP Connection failed\n");
@@ -180,7 +197,7 @@ int RestClient::request(const char* method, const char* path,
     //cleanup
     HTTP_DEBUG_PRINT("HTTP: stop client\n");
     num_headers = 0;
-    if(fingerprint){
+    if(ssl){
         sslClient.stop();
     } else {
         client.stop();
@@ -211,7 +228,7 @@ int RestClient::readResponse(String* response) {
 
     HTTP_DEBUG_PRINT("HTTP: RESPONSE: \n");
     void* http_client;
-    if(fingerprint) {
+    if(ssl) {
         HTTP_DEBUG_PRINT("HTTP: Connect: " + String(sslClient.connected()) + " Available: " + String(sslClient.available()) + "\n");
         while (sslClient.connected()) {
             HTTP_DEBUG_PRINT(".");

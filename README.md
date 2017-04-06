@@ -36,7 +36,12 @@ Use a local IP and an explicit port:
 RestClient client = RestClient("192.168.1.50",5000);
 ```
 
-Use a local IP and an explicit port to an SSL site::
+Use a local IP, an explicit port to an SSL site and (must include the 1 to turn on SSL):
+```c++
+RestClient client = RestClient("www.kudoso.com",443, 1);
+```
+
+Use a local IP, an explicit port to an SSL site and verify the certificate with its fingerprint:
 ```c++
 RestClient client = RestClient("www.kudoso.com",443, "EE 16 77 79 55 58 92 46 FB 18 40 99 2E 17 7E AB 32 0A 4A 88");
 ```
