@@ -1,3 +1,7 @@
+#ifndef RestClient_h
+#define RestClient_h
+
+#include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 
@@ -62,3 +66,5 @@ private:
     const char* fingerprint;
     int ssl;
 };
+
+#endif
