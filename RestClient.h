@@ -39,6 +39,11 @@ public:
     // POST path and body and response
     int post(const char* path, const char* body, String*);
 
+    // PATCH path and body
+    int patch(const char* path, const char* body);
+    // PATCH path and body and response
+    int patch(const char* path, const char* body, String*);
+
     // PUT path and body
     int put(const char* path, const char* body);
     // PUT path and body and response

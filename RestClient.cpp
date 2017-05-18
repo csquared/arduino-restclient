@@ -76,6 +76,16 @@ int RestClient::post(const char* path, const char* body, String* response){
     return request("POST", path, body, response);
 }
 
+// PATCH path and body
+int RestClient::patch(const char* path, const char* body){
+    return request("PATCH", path, body, NULL);
+}
+
+// PATCH path and body with response
+int RestClient::patch(const char* path, const char* body, String* response){
+    return request("PATCH", path, body, response);
+}
+
 // PUT path and body
 int RestClient::put(const char* path, const char* body){
     return request("PUT", path, body, NULL);
