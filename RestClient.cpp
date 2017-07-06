@@ -14,7 +14,9 @@ RestClient::RestClient(const char* _host){
     ssl = 0;
     fingerprint = NULL;
     num_headers = 0;
-    contentType = "application/x-www-form-urlencoded";  // default
+        if (contentType != NULL) {
+            contentType = "application/x-www-form-urlencoded";  // default
+	}
 }
 
 RestClient::RestClient(const char* _host, int _port){
@@ -23,7 +25,9 @@ RestClient::RestClient(const char* _host, int _port){
     ssl = 0;
     fingerprint = NULL;
     num_headers = 0;
-    contentType = "application/x-www-form-urlencoded";  // default
+        if (contentType != NULL) {
+            contentType = "application/x-www-form-urlencoded";  // default
+        }
 }
 
 bool RestClient::dhcp(){
@@ -44,7 +48,9 @@ RestClient::RestClient(const char* _host, int _port, const char* _fingerprint){
     ssl = 1;
     fingerprint = _fingerprint;
     num_headers = 0;
-    contentType = "x-www-form-urlencoded";  // default
+        if (contentType != NULL) {
+            contentType = "application/x-www-form-urlencoded";  // default
+        }
 }
 
 RestClient::RestClient(const char* _host, int _port, int _ssl) {
@@ -53,7 +59,9 @@ RestClient::RestClient(const char* _host, int _port, int _ssl) {
     ssl = (_ssl) ? 1 : 0;
     fingerprint = NULL;
     num_headers = 0;
-    contentType = "x-www-form-urlencoded";  // default
+        if (contentType != NULL) {
+            contentType = "application/x-www-form-urlencoded";  // default
+        }
 }
 
 // GET path
@@ -178,7 +186,7 @@ int RestClient::request(const char* method, const char* path,
     for(int i=0; i<num_headers; i++){
         request += String(headers[i]) + "\r\n";
     }
-    request += "Host: " + String(host) + "\r\n";
+    request += "Host: " + String(host) +  ":" + String(port) + "\r\n";
     request += "Connection: close\r\n";
     if(body != NULL){
         char contentLength[30];
@@ -187,7 +195,9 @@ int RestClient::request(const char* method, const char* path,
 
         request += "Content-Type: " + String(contentType) + "\r\n";
     }
-    request += "\r\n";
+    if(method == "GET"){
+        request += "\r\n";
+    }
 
     if(body != NULL){
         request += String(body);
