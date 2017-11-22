@@ -7,14 +7,19 @@
 #include <SPI.h>
 #include "RestClient.h"
 
-RestClient client = RestClient("arduino-http-lib-test.herokuapp.com");
+const byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+EthernetClient ethclient;
+
+RestClient client = RestClient("arduino-http-lib-test.herokuapp.com", ethclient);
 
 //Setup
 void setup() {
   Serial.begin(9600);
   // Connect via DHCP
-  Serial.println("connect to network");
-  client.dhcp();
+  if(Ethernet.begin(mac)) {
+    Serial.println("connected to network via DHCP");
+    Serial.print("IP received:"); Serial.println(Ethernet.localIP());
+  }
 /*
   // Can still fall back to manual config:
   byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };

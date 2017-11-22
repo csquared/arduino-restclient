@@ -12,7 +12,10 @@
 int test_delay = 1000; //so we don't spam the API
 boolean describe_tests = true;
 
-RestClient client = RestClient("arduino-http-lib-test.herokuapp.com");
+const byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+EthernetClient ethclient;
+
+RestClient client = RestClient("arduino-http-lib-test.herokuapp.com", ethclient);
 //RestClient client  = RestClient("10.0.1.47",5000);
 
 
@@ -20,8 +23,10 @@ RestClient client = RestClient("arduino-http-lib-test.herokuapp.com");
 void setup() {
   Serial.begin(9600);
   // Connect via DHCP
-  Serial.println("connect to network");
-  client.dhcp();
+  if(Ethernet.begin(mac)) {
+    Serial.println("connected to network via DHCP");
+    Serial.print("IP received:"); Serial.println(Ethernet.localIP());
+  }
 /*
   //Can still fall back to manual config:
   byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };

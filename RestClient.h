@@ -1,24 +1,22 @@
 #include <Arduino.h>
-#include <SPI.h>
-#include <Ethernet.h>
+#include "Client.h"
 
 class RestClient {
 
   public:
-    RestClient(const char* host);
-    RestClient(const char* _host, int _port);
-
-    //Client Setup
-    bool dhcp();
-    int begin(byte*);
+    RestClient(const char* host, Client& client);
+    RestClient(const char* _host, int _port, Client& client);
 
     //Generic HTTP Request
     int request(const char* method, const char* path,
                 const char* body, String* response);
+
     // Set a Request Header
-    void setHeader(const char*);
+    RestClient& setHeader(const char*);
     // Set Content-Type Header
-    void setContentType(const char*);
+    RestClient& setContentType(const char*);
+
+    RestClient& setClient(Client& client);
 
     // GET path
     int get(const char*);
@@ -45,12 +43,12 @@ class RestClient {
     int del(const char*, const char*, String*);
 
   private:
-    EthernetClient client;
+    Client* client;
     int readResponse(String*);
     void write(const char*);
     const char* host;
     int port;
     int num_headers;
     const char* headers[10];
-	const char* contentType;
+    const char* contentType;
 };
