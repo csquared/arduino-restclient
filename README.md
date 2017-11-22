@@ -24,64 +24,37 @@ You need to have the `Ethernet` library already included.
 #include "RestClient.h"
 ```
 
-### RestClient(host/ip, [port])
+### RestClient(host/ip, [port], Client)
 
 Constructor to create an RestClient object to make requests against.
 
 Use domain name and default to port 80:
 ```c++
-RestClient client = RestClient("arduino-http-lib-test.herokuapp.com");
+EthernetClient client
+RestClient client = RestClient("arduino-http-lib-test.herokuapp.com", client);
 ```
 
 Use a local IP and an explicit port:
 ```c++
-RestClient client = RestClient("192.168.1.50",5000);
+EthernetClient client
+RestClient client = RestClient("192.168.1.50", 5000, client);
 ```
+### Ethernet Setup
 
-### dhcp()
-
-Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`. Returns `true` or `false` to indicate if setting up DHCP
-was successful or not
+You should configure an EthernetClient-compatible client and supply it to the library:
 
 ```c++
-  client.dhcp()
-```
-
-Note: you can have multiple RestClient objects but only need to call
-this once.
-
-Note: if you have multiple Arduinos on the same network, you'll need
-to give each one a different mac address.
-
-### begin(byte mac[])
-
-It just wraps the `EthernetClient` call to `begin` and DHCPs.
-Use this if you need to explicitly set the mac address.
-
-```c++
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  if (client.begin(mac) == 0) {
-     Serial.println("Failed to configure Ethernet using DHCP");
-  }
-```
-
-### Manual Ethernet Setup
-
-You can skip the above methods and just configure the EthernetClient yourself:
-
-```c++
+EthernetClient client
+RestClient restClient("arduino-http-lib-test.herokuapp.com", client);
+void setup() {
   byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
   //the IP address for the shield:
   byte ip[] = { 192, 168, 2, 11 };
-  Ethernet.begin(mac,ip);
+	Ethernet.begin(mac, ip);
+}
 ```
 
-```c++
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  Ethernet.begin(mac);
-```
-
-This is especially useful for debugging network connection issues.
+See the official documentation for [Ethernet](https://www.arduino.cc/en/Reference/Ethernet) for more information.
 
 ## RESTful methods
 
