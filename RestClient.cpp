@@ -8,36 +8,25 @@
 #define HTTP_DEBUG_PRINT(string)
 #endif
 
-RestClient::RestClient(const char* _host){
+RestClient::RestClient(const char* _host, Client& client){
   host = _host;
   port = 80;
   num_headers = 0;
   contentType = "application/x-www-form-urlencoded";	// default
+  setClient(client);
 }
 
-RestClient::RestClient(const char* _host, int _port){
+RestClient::RestClient(const char* _host, int _port, Client& client){
   host = _host;
   port = _port;
   num_headers = 0;
   contentType = "application/x-www-form-urlencoded";	// default
+  setClient(client);
 }
 
-bool RestClient::dhcp(){
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  if (begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
-    return false;
-  }
-
-  //give it time to initialize
-  delay(1000);
-  return true;
-}
-
-int RestClient::begin(byte mac[]){
-  return Ethernet.begin(mac);
-  //give it time to initialize
-  delay(1000);
+RestClient& RestClient::setClient(Client& client) {
+  this->client = &client;
+  return *this;
 }
 
 // GET path
@@ -92,26 +81,28 @@ int RestClient::del(const char* path, const char* body, String* response){
 
 void RestClient::write(const char* string){
   HTTP_DEBUG_PRINT(string);
-  client.print(string);
+  client->print(string);
 }
 
-void RestClient::setHeader(const char* header){
+RestClient& RestClient::setHeader(const char* header){
   headers[num_headers] = header;
   num_headers++;
+  return *this;
 }
 
-void RestClient::setContentType(const char* contentTypeValue){
+RestClient& RestClient::setContentType(const char* contentTypeValue){
   contentType = contentTypeValue;
+  return *this;
 }
 
 // The mother- generic request method.
 //
 int RestClient::request(const char* method, const char* path,
-                  const char* body, String* response){
+  const char* body, String* response){
 
   HTTP_DEBUG_PRINT("HTTP: connect\n");
 
-  if(client.connect(host, port)){
+  if(client->connect(host, port)){
     HTTP_DEBUG_PRINT("HTTP: connected\n");
     HTTP_DEBUG_PRINT("REQUEST: \n");
     // Make a HTTP request line:
@@ -133,9 +124,9 @@ int RestClient::request(const char* method, const char* path,
       sprintf(contentLength, "Content-Length: %d\r\n", strlen(body));
       write(contentLength);
 
-	  write("Content-Type: ");
-	  write(contentType);
-	  write("\r\n");
+      write("Content-Type: ");
+      write(contentType);
+      write("\r\n");
     }
 
     write("\r\n");
@@ -156,7 +147,7 @@ int RestClient::request(const char* method, const char* path,
     //cleanup
     HTTP_DEBUG_PRINT("HTTP: stop client\n");
     num_headers = 0;
-    client.stop();
+    client->stop();
     delay(50);
     HTTP_DEBUG_PRINT("HTTP: client stopped\n");
 
@@ -185,13 +176,13 @@ int RestClient::readResponse(String* response) {
   }
 
   HTTP_DEBUG_PRINT("HTTP: RESPONSE: \n");
-  while (client.connected()) {
+  while (client->connected()) {
     HTTP_DEBUG_PRINT(".");
 
-    if (client.available()) {
+    if (client->available()) {
       HTTP_DEBUG_PRINT(",");
 
-      char c = client.read();
+      char c = client->read();
       HTTP_DEBUG_PRINT(c);
 
       if(c == ' ' && !inStatus){
@@ -213,22 +204,20 @@ int RestClient::readResponse(String* response) {
       }
       else
       {
-          if (c == '\n' && currentLineIsBlank) {
-            httpBody = true;
-          }
+        if (c == '\n' && currentLineIsBlank) {
+          httpBody = true;
+        }
 
-          if (c == '\n') {
-            // you're starting a new line
-            currentLineIsBlank = true;
-          }
-          else if (c != '\r') {
-            // you've gotten a character on the current line
-            currentLineIsBlank = false;
-          }
+        if (c == '\n') {
+          // you're starting a new line
+          currentLineIsBlank = true;
+        }
+        else if (c != '\r') {
+          // you've gotten a character on the current line
+          currentLineIsBlank = false;
+        }
       }
     }
   }
-
-  HTTP_DEBUG_PRINT("HTTP: return readResponse3\n");
   return code;
 }
