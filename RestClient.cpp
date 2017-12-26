@@ -195,9 +195,7 @@ int RestClient::request(const char* method, const char* path,
 
         request += "Content-Type: " + String(contentType) + "\r\n";
     }
-    if(method == "GET"){
-        request += "\r\n";
-    }
+    request += "\r\n";
 
     if(body != NULL){
         request += String(body);
