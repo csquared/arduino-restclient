@@ -130,7 +130,7 @@ int RestClient::request(const char* method, const char* path,
 
     if(body != NULL){
       char contentLength[30];
-      sprintf(contentLength, "Content-Length: %d\r\n", strlen(body));
+      sprintf(contentLength, "Content-Length: %d\r\n", strlen(body)+1); //The code below sends an extra CRLF
       write(contentLength);
 
 	  write("Content-Type: ");
