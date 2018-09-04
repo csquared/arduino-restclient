@@ -1,0 +1,11 @@
+{
+  "name":"esp8266 restclient",
+  "version":"1.0.0",
+  "keywords":"rest",
+  "description":"A restclient for the esp8266 that supports SSL",
+  "repository":
+  {
+    "type":"git",
+    "url":"https://github.com/DaKaZ/esp8266-restclient.git"
+  }
+}
