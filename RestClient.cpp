@@ -14,9 +14,9 @@ RestClient::RestClient(const char* _host){
     ssl = 0;
     fingerprint = NULL;
     num_headers = 0;
-        if (contentType == NULL) {
-            contentType = "application/x-www-form-urlencoded";  // default
-	}
+    if (!contentType) {
+        contentType = "application/x-www-form-urlencoded";  // default
+    }
 }
 
 RestClient::RestClient(const char* _host, int _port){
@@ -25,9 +25,9 @@ RestClient::RestClient(const char* _host, int _port){
     ssl = 0;
     fingerprint = NULL;
     num_headers = 0;
-        if (contentType == NULL) {
-            contentType = "application/x-www-form-urlencoded";  // default
-        }
+    if (!contentType) {
+       contentType = "application/x-www-form-urlencoded";  // default
+    }
 }
 
 bool RestClient::dhcp(){
@@ -48,9 +48,9 @@ RestClient::RestClient(const char* _host, int _port, const char* _fingerprint){
     ssl = 1;
     fingerprint = _fingerprint;
     num_headers = 0;
-        if (contentType == NULL) {
-            contentType = "application/x-www-form-urlencoded";  // default
-        }
+    if (!contentType) {
+        contentType = "application/x-www-form-urlencoded";  // default
+    }
 }
 
 RestClient::RestClient(const char* _host, int _port, int _ssl) {
@@ -59,9 +59,9 @@ RestClient::RestClient(const char* _host, int _port, int _ssl) {
     ssl = (_ssl) ? 1 : 0;
     fingerprint = NULL;
     num_headers = 0;
-        if (contentType == NULL) {
-            contentType = "application/x-www-form-urlencoded";  // default
-        }
+    if (!contentType) {
+        contentType = "application/x-www-form-urlencoded";  // default
+    }
 }
 
 // GET path
