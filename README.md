@@ -1,6 +1,10 @@
-# RestClient for Arduino
+# RestClient for Arduino ESP8266 WiFi modules
 
-HTTP Request library for Arduino and the Ethernet shield.
+HTTP Request library for Arduino and the ESP8266 WiFi SOC modules
+
+This library now supports SSL!  To use with SSL, you need to include the SHA1 fingerprint of the certificate of the site you are connecting to.  You can get this by using a desktop browser and inspecting the SSL cert used at the site.  Please note: this is FRAGILE, if the site updates their SSL, your code will break.  But, there is not enough memory on the ESP8266 to store all the rool certs, so this is a working method.  Se the example below.
+
+This library is derived almost entirely from the great work done here: https://github.com/csquared/arduino-restclient
 
 # Install
 
@@ -10,19 +14,13 @@ where `~/Documents/Arduino` is your sketchbook directory.
     > cd ~/Documents/Arduino
     > mkdir libraries
     > cd libraries
-    > git clone https://github.com/csquared/arduino-restclient.git RestClient
+    > git clone https://github.com/dakaz/esp8266-restclient.git RestClient
 
 # Usage
 
 ### Include
 
-You need to have the `Ethernet` library already included.
-
-```c++
-#include <Ethernet.h>
-#include <SPI.h>
-#include "RestClient.h"
-```
+You need to have the `ESP8266` board support already included.
 
 ### RestClient(host/ip, [port])
 
@@ -38,50 +36,20 @@ Use a local IP and an explicit port:
 RestClient client = RestClient("192.168.1.50",5000);
 ```
 
+Use a local IP, an explicit port to an SSL site and (must include the 1 to turn on SSL):
+```c++
+RestClient client = RestClient("www.kudoso.com",443, 1);
+```
+
+Use a local IP, an explicit port to an SSL site and verify the certificate with its fingerprint:
+```c++
+RestClient client = RestClient("www.kudoso.com",443, "EE 16 77 79 55 58 92 46 FB 18 40 99 2E 17 7E AB 32 0A 4A 88");
+```
+
 ### dhcp()
 
 Sets up `EthernetClient` with a mac address of `DEADBEEFFEED`. Returns `true` or `false` to indicate if setting up DHCP
 was successful or not
-
-```c++
-  client.dhcp()
-```
-
-Note: you can have multiple RestClient objects but only need to call
-this once.
-
-Note: if you have multiple Arduinos on the same network, you'll need
-to give each one a different mac address.
-
-### begin(byte mac[])
-
-It just wraps the `EthernetClient` call to `begin` and DHCPs.
-Use this if you need to explicitly set the mac address.
-
-```c++
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  if (client.begin(mac) == 0) {
-     Serial.println("Failed to configure Ethernet using DHCP");
-  }
-```
-
-### Manual Ethernet Setup
-
-You can skip the above methods and just configure the EthernetClient yourself:
-
-```c++
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  //the IP address for the shield:
-  byte ip[] = { 192, 168, 2, 11 };
-  Ethernet.begin(mac,ip);
-```
-
-```c++
-  byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-  Ethernet.begin(mac);
-```
-
-This is especially useful for debugging network connection issues.
 
 ## RESTful methods
 
